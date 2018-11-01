@@ -68,6 +68,12 @@
 			</plugin>
 		</plugins>
 	</build>
-
+	<distributionManagement>
+		<repository>
+			<id>cm2i</id>
+			<name>flexiflex</name>
+			<url>file:///home/benoit/.jenkins/workspace/flexiflex/taregt</url>
+		</repository>
+	</distributionManagement>
 
 </project>
