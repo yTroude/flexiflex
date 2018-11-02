@@ -20,7 +20,7 @@ public class GreetingsControllerTest {
 
     @Test
     public void getGreeting() throws Exception {
-                mvc.perform(get("/greeting?name=toto")
+        mvc.perform(get("/greeting?name=toto")
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
