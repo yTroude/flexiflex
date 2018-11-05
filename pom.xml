@@ -71,7 +71,7 @@
                 <artifactId>docker-maven-plugin</artifactId>
                 <version>1.2.0</version>
                 <configuration>
-                    <imageName>example</imageName>
+                    <imageName>flexiflex-server</imageName>
                     <baseImage>java</baseImage>
                     <entryPoint>["java", "-jar", "/${project.build.finalName}.jar"]</entryPoint>
                     <!-- copy the service's jar file from target into the root directory of the image -->
@@ -90,7 +90,7 @@
 		<repository>
 			<id>flexiflex</id>
 			<name>flexiflex</name>
-			<url>file:///home/benoit/.jenkins/workspace/flexiflex/taregt</url>
+			<url>file:///home/benoit/.jenkins/workspace/flexiflex/target</url>
 		</repository>
 	</distributionManagement>
 
