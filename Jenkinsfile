@@ -23,8 +23,10 @@ pipeline {
         }
         stage('Deliver') {
             steps {
-                def customImage = docker.build("target/flexi-server:${env.BUILD_ID}")
-                customImage.push('latest')
+                script {
+                    def customImage = docker.build("my-image:${env.BUILD_ID}")
+                    customImage.push()
+                }
             }
         }
     }
