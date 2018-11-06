@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh 'mvn -B -DskipTests clean package docker:build'
+                sh 'mvn -B -DskipTests clean package'
             }
         }
         stage('Test') {
@@ -23,6 +23,7 @@ pipeline {
         }
         stage('Deliver') {
             steps {
+                sh 'docker build flexiflex-server'
                 sh 'docker run -it -d -p 8081:8080 --name flexi-server flexiflex-server'
             }
         }
