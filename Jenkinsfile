@@ -21,10 +21,9 @@ pipeline {
                 }
             }
         }
-        stage('deploy') {
+        stage('Deliver') {
             steps {
-                sh 'docker build -t flexiflex-server .'
-                sh 'docker run --name flexi-server -it -d -p 8081:8080 flexiflex-server'
+                sh './jenkins/scripts/deliver.sh'
             }
         }
     }
