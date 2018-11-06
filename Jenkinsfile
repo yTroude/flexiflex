@@ -23,6 +23,7 @@ pipeline {
         }
         stage('Deliver') {
             steps {
+                sh 'mvn -B -DskipTests clean package'
                 script {
                     def customImage = docker.build("my-image:${env.BUILD_ID}")
                     customImage.push()
