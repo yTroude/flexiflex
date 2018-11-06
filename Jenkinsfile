@@ -2,7 +2,7 @@ pipeline {
     agent {
         docker {
             image 'maven:3-alpine'
-            args '-p 8081:8080 -v /root/.m2:/root/.m2'
+            args ' -v /root/.m2:/root/.m2'
         }
     }
     stages {
@@ -19,6 +19,12 @@ pipeline {
                 always {
                     junit 'target/surefire-reports/*.xml'
                 }
+            }
+        }
+        stage('deploy') {
+            steps {
+                sh 'docker build -t flexiflex-server .'
+                sh 'docker run --name flexi-server -it -d -p 8081:8080 flexiflex-server'
             }
         }
     }
