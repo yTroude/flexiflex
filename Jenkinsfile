@@ -23,7 +23,8 @@ pipeline {
         }
         stage('Deliver') {
             steps {
-                sh 'mvn clean package docker:build'
+                def customImage = docker.build("target/flexi-server:${env.BUILD_ID}")
+                customImage.push('latest')
             }
         }
     }
