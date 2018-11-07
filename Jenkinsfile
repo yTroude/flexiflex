@@ -1,8 +1,8 @@
 pipeline {
     agent {
         docker {
-            image 'maven:3-alpine'
-            args '-v /root/.m2:/root/.m2'
+            image 'jamesdbloom/docker-java8-maven'
+            args ' -v /root/.m2:/root/.m2'
         }
     }
     stages {
@@ -23,7 +23,7 @@ pipeline {
         }
         stage('Deliver') {
             steps {
-                sh './jenkins/scripts/deliver.sh'
+                sh 'mvn -B -DskipTests clean package docker:build'
             }
         }
     }

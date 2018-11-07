@@ -5,11 +5,17 @@
 
 	<groupId>com.m2i</groupId>
 	<artifactId>flexiflex</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.${BUILD_NUMBER}</version>
 	<packaging>jar</packaging>
 
 	<name>flexiflex</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Video streaming webapp</description>
+    <distributionManagement>
+        <repository>
+            <id>nexus-release</id>
+            <url>http://localhost:8888/repository/maven-releases/</url>
+        </repository>
+    </distributionManagement>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -58,40 +64,41 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+            <version>${hibernate.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>${hibernate.version}</version>
+        </dependency>
 	</dependencies>
 
-	<build>
+    	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-            <plugin>
-                <groupId>com.spotify</groupId>
-                <artifactId>docker-maven-plugin</artifactId>
-                <version>1.2.0</version>
-                <configuration>
-                    <imageName>example</imageName>
-                    <baseImage>java</baseImage>
-                    <entryPoint>["java", "-jar", "/${project.build.finalName}.jar"]</entryPoint>
-                    <!-- copy the service's jar file from target into the root directory of the image -->
-                    <resources>
-                        <resource>
-                            <targetPath>/</targetPath>
-                            <directory>${project.build.directory}</directory>
-                            <include>${project.build.finalName}.jar</include>
-                        </resource>
-                    </resources>
-                </configuration>
-            </plugin>
+			<plugin>
+				<groupId>com.spotify</groupId>
+				<artifactId>docker-maven-plugin</artifactId>
+				<version>1.2.0</version>
+				<configuration>
+					<imageName>flexiflex-server</imageName>
+					<baseImage>java</baseImage>
+					<entryPoint>["java", "-jar", "/${project.build.finalName}.jar"]</entryPoint>
+					<resources>
+						<resource>
+							<targetPath>/</targetPath>
+							<directory>${project.build.directory}</directory>
+							<include>${project.build.finalName}.jar</include>
+						</resource>
+					</resources>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
-	<distributionManagement>
-		<repository>
-			<id>flexiflex</id>
-			<name>flexiflex</name>
-			<url>file:///home/benoit/.jenkins/workspace/flexiflex/taregt</url>
-		</repository>
-	</distributionManagement>
-
 </project>
