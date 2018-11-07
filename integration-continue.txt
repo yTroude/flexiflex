@@ -48,4 +48,5 @@ Mise en place déploiement continu sur le server linux:
         voir Jenkinsfile
 
     -Configuration de docker:
+        https://docs.docker.com/develop/develop-images/baseimages/#create-a-simple-parent-image-using-scratch
         voir Dockerfile
