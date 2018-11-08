@@ -5,7 +5,7 @@ import java.security.MessageDigest;
 
 public class Cryptor {
 
-    private static String salt="D36B32H34F31L31Y30";
+    private static String salt="D36B32H34F31L31";
 
     public static String getSHA256(String input){
 
