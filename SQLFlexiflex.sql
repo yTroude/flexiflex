@@ -90,15 +90,13 @@ CREATE TABLE IF NOT EXISTS `realisateur` (
 
 -- Les données exportées n'étaient pas sélectionnées.
 -- Export de la structure de la table flexiflex. utilisateur
-CREATE TABLE IF NOT EXISTS `utilisateur` (
+CREATE TABLE IF NOT EXISTS `user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `email` varchar(255) NOT NULL,
   `prenom` varchar(255) NOT NULL,
   `nom` varchar(255) NOT NULL,
   `date_naissance` timestamp NOT NULL,
   `mot_passe` char(45) NOT NULL,
-  `date_inscription` timestamp NOT NULL,
-  `date_validation_inscription` timestamp NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email_UNIQUE` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
