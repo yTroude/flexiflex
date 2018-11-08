@@ -3,7 +3,7 @@
         "-//Hibernate/Hibernate Configuration DTD//EN"
         "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
-    <session-factory name="SessionFactory">
+    <session-factory>
         <property name="connection.url">jdbc:mysql://localhost:3306/flexiflex</property>
         <property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property>
         <property name="hibernate.connection.username">flexiflexadmin</property>
@@ -13,6 +13,6 @@
 
         <!--DB schema will be updated if needed -->
          <property name="hbm2ddl.auto">update</property>
-        <mapping class="com.m2i.flexiflex.persistence.UserEntity"/>
+        <mapping class="com.m2i.flexiflex.entity.UserEntity"/>
     </session-factory>
 </hibernate-configuration>

@@ -1,4 +1,4 @@
-package com.m2i.flexiflex.persistence;
+package com.m2i.flexiflex.entity;
 
 import javax.persistence.*;
 import java.util.Objects;
