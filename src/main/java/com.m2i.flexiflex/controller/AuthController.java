@@ -1,9 +1,9 @@
 package com.m2i.flexiflex.controller;
 
 import com.m2i.flexiflex.entity.UserEntity;
-import com.m2i.flexiflex.response.UserResponse;
 import com.m2i.flexiflex.service.HibernateSession;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,12 +17,23 @@ public class AuthController {
     private final Session session = HibernateSession.getSession();
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public Object register(@RequestParam String email, @RequestParam String password) {
-        return new ResponseEntity(HttpStatus.OK);
+    public ResponseEntity register(@RequestParam String email, @RequestParam String password) {
+        try {
+            Transaction tx = session.beginTransaction();
+            UserEntity user = new UserEntity();
+            user.setEmail(email);
+            user.setPassword(password);
+            session.saveOrUpdate(user);
+            tx.commit();
+            return new ResponseEntity(HttpStatus.CREATED);
+        } catch (Exception e) {
+            //
+        }
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public ResponseEntity<UserResponse> login(@RequestParam String email, @RequestParam String password) {
+    public ResponseEntity login(@RequestParam String email, @RequestParam String password) {
 
         String pattern = "from com.m2i.flexiflex.entity.UserEntity U where U.email = '%s'";
 
@@ -30,12 +41,12 @@ public class AuthController {
             UserEntity user = (UserEntity) session.createQuery(String.format(pattern, email)).list().get(0);
 
             if (user.getPassword().equals(password)) {
-                return new ResponseEntity<>(HttpStatus.OK);
+                return new ResponseEntity(HttpStatus.OK);
             }
         } catch (Exception e) {
             //
         }
-        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity(HttpStatus.UNAUTHORIZED);
 
     }
 }
