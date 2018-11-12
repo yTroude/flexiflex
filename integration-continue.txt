@@ -1,0 +1,52 @@
+Mise en place déploiement continu sur le server linux:
+
+    -Intallation de docker :
+
+        sudo apt-get install \
+            apt-transport-https \
+            ca-certificates \
+            curl \
+            software-properties-common
+
+        sudo add-apt-repository \
+           "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+           $(lsb_release -cs) \
+           stable"
+        sudo apt-get update
+        sudo apt-get install docker-ce
+
+    - Installation de mysql :
+
+        sudo docker run --name flexiflex-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql
+        monte l’image docker de mysql
+
+        sudo docker exec -it flexiflex-mysql mysql -root -p
+        se connecter au client mysql
+
+
+        CREATE USER 'flexiflexadmin'@'localhost' IDENTIFIED BY 'm2ijavamsa';
+        créer un user flexiflex avec le bon password
+
+
+        CREATE DATABASE flexiflex ;
+
+
+        GRANT ALL PRIVILEGES ON * . * TO 'flexiflex'@'localhost';
+
+        donne les privvileges aux utilisateur.
+
+
+    -Installation de jenkins :
+
+        docker pull jenkins
+
+        docker run -d -p 49001:8080 -v $PWD/jenkins:/var/jenkins_home:z -t jenkins
+
+    -Configuration du pipeline de déploiement dans jenkins:
+
+        voir https://jenkins.io/doc/book/pipeline/
+        voir Jenkinsfile
+
+    -Configuration de docker:
+        https://docs.docker.com/develop/develop-images/baseimages/#create-a-simple-parent-image-using-scratch
+        voir Dockerfile
