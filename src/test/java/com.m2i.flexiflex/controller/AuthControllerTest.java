@@ -1,11 +1,12 @@
 package com.m2i.flexiflex.controller;
 
 import com.m2i.flexiflex.entity.UserEntity;
+import com.m2i.flexiflex.entity.properties.UserProperties;
 import com.m2i.flexiflex.service.HibernateSession;
-import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.criterion.Restrictions;
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Property;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,9 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import javax.persistence.TransactionRequiredException;
 import java.nio.charset.Charset;
+import java.util.List;
 
+import static net.bytebuddy.matcher.ElementMatchers.is;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -28,6 +31,9 @@ public class AuthControllerTest {
 
     @Autowired
     private MockMvc mvc;
+
+    private String testUserMail = "user@mail.com";
+    private String testUserPassword = "secret";
 
     private Session hbsession = HibernateSession.getSession();
 
@@ -43,9 +49,9 @@ public class AuthControllerTest {
         makeTestUser();
 
         mvc.perform(post("/login")
-                .param("email", "user@mail.com")
-                .param("password", "secret")
-                .contentType(APPLICATION_JSON))
+                .param(UserProperties.EMAIL.get(), testUserMail)
+                .param(UserProperties.PASSWORD.get(), testUserPassword)
+                .contentType(APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk());
 
         deleteTestUser();
@@ -57,8 +63,8 @@ public class AuthControllerTest {
         makeTestUser();
 
         mvc.perform(post("/login")
-                .param("email", "user@mail.com")
-                .param("password", "caca")
+                .param(UserProperties.EMAIL.get(), testUserMail)
+                .param(UserProperties.PASSWORD.get(), "caca")
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isUnauthorized());
 
@@ -68,8 +74,8 @@ public class AuthControllerTest {
     @Test
     public void nonUserCannotLogin() throws Exception {
         mvc.perform(post("/login")
-                .param("email", "toto@caca.toto")
-                .param("password", "secret")
+                .param(UserProperties.EMAIL.get(), "toto@caca.toto")
+                .param(UserProperties.PASSWORD.get(), testUserPassword)
                 .contentType(APPLICATION_JSON_UTF8))
                 .andExpect(status().isUnauthorized());
     }
@@ -78,8 +84,8 @@ public class AuthControllerTest {
     public void nonUserCanRegister() throws Exception {
 
         mvc.perform(post("/register")
-                .param("email", "user@mail.com")
-                .param("password", "secret")
+                .param(UserProperties.EMAIL.get(), testUserMail)
+                .param(UserProperties.PASSWORD.get(), testUserPassword)
                 .contentType(APPLICATION_JSON_UTF8))
                 .andExpect(status().isCreated()).andDo(print());
 
@@ -88,12 +94,14 @@ public class AuthControllerTest {
 
     private void deleteTestUser() {
         try {
-            Transaction tx = hbsession.beginTransaction();
-            Criteria cr = hbsession.createCriteria(UserEntity.class);
-            cr.add(Restrictions.eq("email", "user@mail.com"));
-            UserEntity userEntity = (UserEntity) cr.uniqueResult();
-            hbsession.delete(userEntity);
-            tx.commit();
+            DetachedCriteria detachedCriteria = DetachedCriteria.forClass(UserEntity.class)
+                    .add(Property.forName(UserProperties.EMAIL.get()).eq(testUserMail));
+            List userEntity = detachedCriteria.getExecutableCriteria(hbsession).list();
+            if (!userEntity.isEmpty()) {
+                Transaction tx = hbsession.beginTransaction();
+                hbsession.delete(userEntity.get(0));
+                tx.commit();
+            }
         } catch (TransactionRequiredException e) {
             e.fillInStackTrace();
         }
@@ -101,12 +109,17 @@ public class AuthControllerTest {
 
     private void makeTestUser() {
         try {
-            Transaction tx = hbsession.beginTransaction();
-            UserEntity user = new UserEntity();
-            user.setEmail("user@mail.com");
-            user.setPassword("secret");
-            hbsession.saveOrUpdate(user);
-            tx.commit();
+            DetachedCriteria detachedCriteria = DetachedCriteria.forClass(UserEntity.class)
+                    .add(Property.forName(UserProperties.EMAIL.get()).eq(testUserMail));
+            List userEntity = detachedCriteria.getExecutableCriteria(hbsession).list();
+            if (userEntity.isEmpty()) {
+                Transaction tx = hbsession.beginTransaction();
+                UserEntity user = new UserEntity();
+                user.setEmail(testUserMail);
+                user.setPassword(testUserPassword);
+                hbsession.saveOrUpdate(user);
+                tx.commit();
+            }
         } catch (TransactionRequiredException e) {
             e.fillInStackTrace();
         }
