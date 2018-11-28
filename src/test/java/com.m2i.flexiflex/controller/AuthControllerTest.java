@@ -3,6 +3,7 @@ package com.m2i.flexiflex.controller;
 import com.m2i.flexiflex.entity.UserEntity;
 import com.m2i.flexiflex.entity.properties.UserProperties;
 import com.m2i.flexiflex.service.HibernateSession;
+import com.m2i.flexiflex.service.TokenGenerator;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.DetachedCriteria;
@@ -17,9 +18,11 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import javax.persistence.TransactionRequiredException;
 import java.nio.charset.Charset;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
-import static net.bytebuddy.matcher.ElementMatchers.is;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -92,6 +95,19 @@ public class AuthControllerTest {
         deleteTestUser();
     }
 
+    @Test
+    public void registeredUserCannotRegister() throws Exception {
+        makeTestUser();
+
+        mvc.perform(post("/register")
+                .param(UserProperties.EMAIL.get(), testUserMail)
+                .param(UserProperties.PASSWORD.get(), testUserPassword)
+                .contentType(APPLICATION_JSON_UTF8))
+                .andExpect(status().isBadRequest()).andDo(print());
+
+        deleteTestUser();
+    }
+
     private void deleteTestUser() {
         try {
             DetachedCriteria detachedCriteria = DetachedCriteria.forClass(UserEntity.class)
@@ -117,6 +133,10 @@ public class AuthControllerTest {
                 UserEntity user = new UserEntity();
                 user.setEmail(testUserMail);
                 user.setPassword(testUserPassword);
+                user.setInscriptionDate(Date.valueOf(LocalDate.now()));
+                user.setValidationToken(TokenGenerator.GetTokenSHA256());
+                user.setEmailValidation(0);
+                user.setUuid(UUID.randomUUID().toString());
                 hbsession.saveOrUpdate(user);
                 tx.commit();
             }
@@ -124,4 +144,5 @@ public class AuthControllerTest {
             e.fillInStackTrace();
         }
     }
+
 }

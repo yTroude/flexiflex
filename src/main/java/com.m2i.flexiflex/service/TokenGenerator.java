@@ -7,7 +7,7 @@ import java.util.UUID;
 public class TokenGenerator {
 
     public static String GetTokenSHA256(){
-        String token = null;;
+        String token = null;
         try {
             UUID uuid = UUID.randomUUID();
             MessageDigest salt = MessageDigest.getInstance("SHA-256");
