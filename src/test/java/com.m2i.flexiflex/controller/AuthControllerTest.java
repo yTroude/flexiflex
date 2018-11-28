@@ -19,7 +19,6 @@ import javax.persistence.TransactionRequiredException;
 import java.nio.charset.Charset;
 import java.util.List;
 
-import static net.bytebuddy.matcher.ElementMatchers.is;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -52,7 +51,7 @@ public class AuthControllerTest {
                 .param(UserProperties.EMAIL.get(), testUserMail)
                 .param(UserProperties.PASSWORD.get(), testUserPassword)
                 .contentType(APPLICATION_JSON_UTF8))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk()).andDo(print());
 
         deleteTestUser();
     }

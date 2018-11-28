@@ -29,14 +29,15 @@ public class AuthController {
             session.saveOrUpdate(user);
             tx.commit();
             return new ResponseEntity(HttpStatus.CREATED);
+
         } catch (Exception e) {
-            //
+            e.fillInStackTrace();
         }
         return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public ResponseEntity login(@RequestParam String email, @RequestParam String password) {
+    public ResponseEntity<UserEntity> login(@RequestParam String email, @RequestParam String password) {
 
         DetachedCriteria detachedCriteria = DetachedCriteria.forClass(UserEntity.class)
                 .add( Property.forName(UserProperties.EMAIL.get()).eq(email) );
@@ -45,12 +46,12 @@ public class AuthController {
             UserEntity user = (UserEntity) detachedCriteria.getExecutableCriteria(session).list().get(0);
 
             if (user.getPassword().equals(password)) {
-                return new ResponseEntity(HttpStatus.OK);
+                return new ResponseEntity<>(user, HttpStatus.OK);
             }
         } catch (Exception e) {
-            //
+            e.fillInStackTrace();
         }
-        return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>((UserEntity) null, HttpStatus.UNAUTHORIZED);
 
     }
 }
