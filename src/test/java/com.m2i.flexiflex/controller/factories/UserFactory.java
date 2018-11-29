@@ -52,14 +52,14 @@ public class UserFactory {
         }
     }
 
-    public static void makeTestUser() {
+    public static UserEntity makeTestUser() {
+        UserEntity user = new UserEntity();
         try {
             DetachedCriteria detachedCriteria = DetachedCriteria.forClass(UserEntity.class)
                     .add(Property.forName(UserProperties.EMAIL).eq(testUserMail));
             List userEntity = detachedCriteria.getExecutableCriteria(hbsession).list();
             if (userEntity.isEmpty()) {
                 Transaction tx = hbsession.beginTransaction();
-                UserEntity user = new UserEntity();
                 user.setEmail(testUserMail);
                 user.setPassword(testUserPassword);
                 user.setInscriptionDate(Date.valueOf(LocalDate.now()));
@@ -72,5 +72,7 @@ public class UserFactory {
         } catch (TransactionRequiredException e) {
             e.fillInStackTrace();
         }
+
+        return user;
     }
 }

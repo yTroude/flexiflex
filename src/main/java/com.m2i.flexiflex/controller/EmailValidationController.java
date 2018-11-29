@@ -1,20 +1,41 @@
 package com.m2i.flexiflex.controller;
-import com.m2i.flexiflex.service.Cryptor;
+import com.m2i.flexiflex.entity.UserEntity;
+import com.m2i.flexiflex.entity.properties.UserProperties;
+import com.m2i.flexiflex.service.HibernateSession;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Property;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
+import java.util.List;
 
 @RestController
 public class EmailValidationController {
     @RequestMapping(path="/email_validation", method = RequestMethod.GET)
-    public ResponseEntity<String> url(@RequestParam(value="key") String key, @RequestParam(value="id") Integer id) {
-
-        String[] PreInscriptionEmails={"flexiflex.emailvalidation@gmail.com","nimportequoi@nimporteou.com"};
-        //  Valid URLs:
-        //  http://localhost:8080/email_validation?key=7e62acd8a69b4b27bd9b7c6fe1af006eea890e151af4eb29b37802b6b0f07664&id=0
-        //  http://localhost:8080/email_validation?key=54eaa93444577f299d5cbdda60d958c4d051541b1d0b9fbc90d5a23066a7e0ad&id=1
-
-        boolean emailvalidation=Cryptor.verifySHA256(PreInscriptionEmails[id],key);
-        return new ResponseEntity<>(emailvalidation? "Validation success: " + PreInscriptionEmails[id] : "Validation failure", HttpStatus.OK);
+    public ResponseEntity<String> url(@RequestParam(value="key1") String uuid, @RequestParam(value="key2") String validationToken) {
+        try {
+            Session session = HibernateSession.getSession();
+            DetachedCriteria detachedCriteria = DetachedCriteria.forClass(UserEntity.class).add(Property.forName(UserProperties.UUID).eq(uuid));
+            List <UserEntity> userEntity= detachedCriteria.getExecutableCriteria(session).list();
+            if (!userEntity.isEmpty()){
+                UserEntity user=userEntity.get(0);
+                if(validationToken.equals(user.getValidationToken())) {
+                    try{
+                        Transaction transaction = session.beginTransaction();
+                        user.setEmailValidation(1);
+                        session.save(user);
+                        transaction.commit();
+                        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+                    }
+                    catch (Exception e) {
+                    }
+                }
+            }
+        }
+        catch (Exception e){
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 }

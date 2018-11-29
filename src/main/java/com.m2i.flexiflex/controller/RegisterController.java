@@ -2,9 +2,7 @@ package com.m2i.flexiflex.controller;
 
 import com.m2i.flexiflex.entity.UserEntity;
 import com.m2i.flexiflex.entity.properties.UserProperties;
-import com.m2i.flexiflex.service.Cryptor;
 import com.m2i.flexiflex.service.HibernateSession;
-import com.m2i.flexiflex.service.SendMail;
 import com.m2i.flexiflex.service.TokenGenerator;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
