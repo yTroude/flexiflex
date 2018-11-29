@@ -1,4 +1,4 @@
-package com.m2i.flexiflex.helpers;
+package com.m2i.flexiflex.service;
 
 import java.util.Properties;
 import javax.mail.Authenticator;
@@ -25,31 +25,31 @@ import javax.mail.internet.MimeMessage;
 //    }
 
 
-// Class qui gère l'envoi d'email avec les paramètres du compte Gmail de Flexiflex
 public class SendMail {
 
-    public void sendMail(String m_from,String m_to,String m_subject,String m_body){
+    public static void sendMail(String m_from,String m_to,String m_subject,String m_body){
 
         try {
             final String username = ""; // Mettre l'email de Flexiflex
             final String password = ""; // Mettre le password de Flexiflex
 
-            m_properties = new Properties();
+            Properties m_properties = new Properties();
             m_properties.put("mail.smtp.host", "smtp.gmail.com");
             m_properties.put("mail.smtp.socketFactory.port", "465");
             m_properties.put("mail.smtp.socketFactory.class","javax.net.ssl.SSLSocketFactory");
             m_properties.put("mail.smtp.auth", "true");
             m_properties.put("mail.smtp.port", "465");
 
-            m_Session = Session.getDefaultInstance(m_properties,new Authenticator() {
+            // username and the password
+            Session m_Session = Session.getDefaultInstance(m_properties, new Authenticator() {
                 protected PasswordAuthentication getPasswordAuthentication() {
                     return new PasswordAuthentication(username, password); // username and the password
                 }
             });
 
-            m_simpleMessage  = new MimeMessage(m_Session);
-            m_fromAddress    = new InternetAddress(m_from);
-            m_toAddress      = new InternetAddress(m_to);
+            Message m_simpleMessage = new MimeMessage(m_Session);
+            InternetAddress m_fromAddress = new InternetAddress(m_from);
+            InternetAddress m_toAddress = new InternetAddress(m_to);
 
             m_simpleMessage.setFrom(m_fromAddress);
             m_simpleMessage.setRecipient(RecipientType.TO, m_toAddress);
@@ -62,10 +62,4 @@ public class SendMail {
             ex.printStackTrace();
         }
     }
-
-    private Session m_Session;
-    private Message m_simpleMessage;
-    private InternetAddress m_fromAddress;
-    private InternetAddress m_toAddress;
-    private Properties m_properties;
 }

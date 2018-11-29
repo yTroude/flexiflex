@@ -23,7 +23,7 @@ public class AuthController {
     public ResponseEntity<UserEntity> login(@RequestParam String email, @RequestParam String password) {
 
         DetachedCriteria detachedCriteria = DetachedCriteria.forClass(UserEntity.class)
-                .add(Property.forName(UserProperties.EMAIL.get()).eq(email) );
+                .add(Property.forName(UserProperties.EMAIL).eq(email) );
 
         try {
             UserEntity user = (UserEntity) detachedCriteria.getExecutableCriteria(session).list().get(0);

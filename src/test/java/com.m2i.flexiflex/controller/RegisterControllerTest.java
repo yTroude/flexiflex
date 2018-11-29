@@ -32,8 +32,8 @@ public class RegisterControllerTest {
     @Test
     public void nonUserCanRegister() throws Exception{
         mvc.perform(post("/register")
-                .param(UserProperties.EMAIL.get(), UserFactory.getTestUserMail())
-                .param(UserProperties.PASSWORD.get(), UserFactory.getTestUserPassword())
+                .param(UserProperties.EMAIL, UserFactory.getTestUserMail())
+                .param(UserProperties.PASSWORD, UserFactory.getTestUserPassword())
                 .contentType(APPLICATION_JSON_UTF8))
                 .andExpect(status().isCreated());
 
@@ -45,8 +45,8 @@ public class RegisterControllerTest {
         makeTestUser();
 
         mvc.perform(post("/register")
-                .param(UserProperties.EMAIL.get(), UserFactory.getTestUserMail())
-                .param(UserProperties.PASSWORD.get(), UserFactory.getTestUserPassword())
+                .param(UserProperties.EMAIL, UserFactory.getTestUserMail())
+                .param(UserProperties.PASSWORD, UserFactory.getTestUserPassword())
                 .contentType(APPLICATION_JSON_UTF8))
                 .andExpect(status().isBadRequest());
 

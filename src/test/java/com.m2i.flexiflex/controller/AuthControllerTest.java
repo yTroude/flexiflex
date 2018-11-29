@@ -33,8 +33,8 @@ public class AuthControllerTest {
     @Test
     public void nonUserCannotLogin() throws Exception {
         mvc.perform(post("/login")
-                .param(UserProperties.EMAIL.get(), "toto@caca.toto")
-                .param(UserProperties.PASSWORD.get(), UserFactory.getTestUserPassword())
+                .param(UserProperties.EMAIL, "toto@caca.toto")
+                .param(UserProperties.PASSWORD, UserFactory.getTestUserPassword())
                 .contentType(APPLICATION_JSON_UTF8))
                 .andExpect(status().isUnauthorized());
     }
@@ -44,8 +44,8 @@ public class AuthControllerTest {
         makeTestUser();
 
         mvc.perform(post("/login")
-                .param(UserProperties.EMAIL.get(), UserFactory.getTestUserMail())
-                .param(UserProperties.PASSWORD.get(), "caca")
+                .param(UserProperties.EMAIL, UserFactory.getTestUserMail())
+                .param(UserProperties.PASSWORD, "caca")
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isUnauthorized());
 
@@ -57,8 +57,8 @@ public class AuthControllerTest {
         makeTestUser();
 
         mvc.perform(post("/login")
-                .param(UserProperties.EMAIL.get(), UserFactory.getTestUserMail())
-                .param(UserProperties.PASSWORD.get(), UserFactory.getTestUserPassword())
+                .param(UserProperties.EMAIL, UserFactory.getTestUserMail())
+                .param(UserProperties.PASSWORD, UserFactory.getTestUserPassword())
                 .contentType(APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk());
 

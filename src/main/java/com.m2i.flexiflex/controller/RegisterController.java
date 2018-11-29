@@ -4,6 +4,7 @@ import com.m2i.flexiflex.entity.UserEntity;
 import com.m2i.flexiflex.entity.properties.UserProperties;
 import com.m2i.flexiflex.service.Cryptor;
 import com.m2i.flexiflex.service.HibernateSession;
+import com.m2i.flexiflex.service.SendMail;
 import com.m2i.flexiflex.service.TokenGenerator;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -30,7 +31,7 @@ public class RegisterController {
 
         try {
             DetachedCriteria detachedCriteria = DetachedCriteria.forClass(UserEntity.class)
-                    .add(Property.forName(UserProperties.EMAIL.get()).eq(email));
+                    .add(Property.forName(UserProperties.EMAIL).eq(email));
 
             if (detachedCriteria.getExecutableCriteria(session).list().isEmpty()){
                 Transaction tx = session.beginTransaction();
@@ -43,6 +44,7 @@ public class RegisterController {
                 user.setUuid(UUID.randomUUID().toString());
                 session.save(user);
                 tx.commit();
+
                 return new ResponseEntity(HttpStatus.CREATED);
             }
         } catch (Exception e) {

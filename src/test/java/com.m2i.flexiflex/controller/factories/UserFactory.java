@@ -40,7 +40,7 @@ public class UserFactory {
     public static void deleteTestUser() {
         try {
             DetachedCriteria detachedCriteria = DetachedCriteria.forClass(UserEntity.class)
-                    .add(Property.forName(UserProperties.EMAIL.get()).eq(testUserMail));
+                    .add(Property.forName(UserProperties.EMAIL).eq(testUserMail));
             List userEntity = detachedCriteria.getExecutableCriteria(hbsession).list();
             if (!userEntity.isEmpty()) {
                 Transaction tx = hbsession.beginTransaction();
@@ -55,7 +55,7 @@ public class UserFactory {
     public static void makeTestUser() {
         try {
             DetachedCriteria detachedCriteria = DetachedCriteria.forClass(UserEntity.class)
-                    .add(Property.forName(UserProperties.EMAIL.get()).eq(testUserMail));
+                    .add(Property.forName(UserProperties.EMAIL).eq(testUserMail));
             List userEntity = detachedCriteria.getExecutableCriteria(hbsession).list();
             if (userEntity.isEmpty()) {
                 Transaction tx = hbsession.beginTransaction();
