@@ -6,20 +6,12 @@
     <session-factory>
         <property name="connection.url">jdbc:mysql://localhost:3306/flexiflex</property>
         <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
-        <mapping class="com.m2i.flexiflex.modelEntity.ActorEntity"/>
-        <mapping class="com.m2i.flexiflex.modelEntity.DirectorEntity"/>
-        <mapping class="com.m2i.flexiflex.modelEntity.GenreEntity"/>
-        <mapping class="com.m2i.flexiflex.modelEntity.IdentityEntity"/>
-        <mapping class="com.m2i.flexiflex.modelEntity.ProductEntity"/>
-        <mapping class="com.m2i.flexiflex.modelEntity.ProductActorEntity"/>
-        <mapping class="com.m2i.flexiflex.modelEntity.ProductDirectorEntity"/>
-        <mapping class="com.m2i.flexiflex.modelEntity.ProductGenreEntity"/>
+        <!--<property name="hbm2ddl.auto">create</property>-->
+        <!--<property name="hibernate.hbm2ddl.auto">create</property>-->
         <mapping class="com.m2i.flexiflex.modelEntity.UserEntity"/>
-        <mapping class="com.m2i.flexiflex.modelEntity.UserProductEntity"/>
         <!-- <property name="connection.username"/> -->
         <!-- <property name="connection.password"/> -->
 
         <!-- DB schema will be updated if needed -->
-        <!-- <property name="hbm2ddl.auto">update</property> -->
     </session-factory>
 </hibernate-configuration>

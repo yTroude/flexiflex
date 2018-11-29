@@ -1,11 +1,12 @@
 package com.m2i.flexiflex.entity;
 
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import javax.persistence.*;
 import java.sql.Date;
 import java.util.Objects;
 
-@Entity
-@Table(name = "user", schema = "flexiflex")
+@Entity(name = "user")
 public class UserEntity {
     private int id;
     private String email;
