@@ -12,7 +12,7 @@
         <property name="hibernate.connection.password">test</property>
 
         <!--DB schema will be updated if needed -->
-         <property name="hbm2ddl.auto">update</property>
+        <property name="hbm2ddl.auto">update</property>
         <mapping class="com.m2i.flexiflex.entity.UserEntity"/>
     </session-factory>
 </hibernate-configuration>
