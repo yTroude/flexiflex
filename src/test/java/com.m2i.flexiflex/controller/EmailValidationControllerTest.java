@@ -1,33 +1,113 @@
+
 package com.m2i.flexiflex.controller;
 
+import com.m2i.flexiflex.entity.UserEntity;
+import com.m2i.flexiflex.entity.properties.UserProperties;
+import com.m2i.flexiflex.service.HibernateSession;
+import com.m2i.flexiflex.service.TokenGenerator;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Property;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.hamcrest.CoreMatchers.containsString;
+import javax.persistence.TransactionRequiredException;
+import java.nio.charset.Charset;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.UUID;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(EmailValidationController.class)
 public class EmailValidationControllerTest {
 
     @Autowired
-    private MockMvc mockMvc;
+    private MockMvc mvc;
+    private Session hbsession = HibernateSession.getSession();
+    private String testUserMail = "user@mail.com";
+    private String testUserPassword = "secret";
+
+    private static final MediaType APPLICATION_JSON_UTF8 = new MediaType(
+            MediaType.APPLICATION_JSON.getType(),
+            MediaType.APPLICATION_JSON.getSubtype(),
+            Charset.forName("utf8"));
 
     @Test
-    public void ShouldValidateEmailOrNot() throws Exception {
-        this.mockMvc.perform(get("/email_validation?key1=7e62acd8a69b4b27bd9b7c6fe1af006eea890e151af4eb29b37802b6b0f07664&key2=0")).andExpect(status().isOk())
-                .andExpect(content().string(containsString("Validation success")));
-//        this.mockMvc.perform(get("/email_validation?key=7e62acd8a69b4b27bd9b7c6fe1af006eea890e151af4eb29b37802b6b0f07664&id=1")).andExpect(status().isOk())
-//                .andExpect(content().string(containsString("Validation failure")));
-//        this.mockMvc.perform(get("/email_validation?key=54eaa93444577f299d5cbdda60d958c4d051541b1d0b9fbc90d5a23066a7e0ad&id=0")).andExpect(status().isOk())
-//                .andExpect(content().string(containsString("Validation failure")));
-//        this.mockMvc.perform(get("/email_validation?key=54eaa93444577f299d5cbdda60d958c4d051541b1d0b9fbc90d5a23066a7e0ad&id=1")).andExpect(status().isOk())
-//                .andExpect(content().string(containsString("Validation success")));
+    public void emailValidationRequestParamAbsent() throws Exception {
+        String url = "/email_validation";
+        this.mvc.perform(get(url)).andExpect(status().isBadRequest()).andDo(print());
+    }
+
+    @Test
+    public void emailValidationBadUuid() throws Exception {
+        UserEntity userEntity = makeTestUser();
+        String url = "/email_validation?key1=" + "nimportequoi" + "&key2=" + "nimportequoi";
+        this.mvc.perform(get(url)).andExpect(status().isBadRequest()).andDo(print());
+        deleteTestUser();
+    }
+
+    @Test
+    public void emailValidationBadValidationToken() throws Exception {
+        UserEntity userEntity = makeTestUser();
+        String url = "/email_validation?key1=" + userEntity.getUuid() + "&key2=" + "nimportequoi";
+        this.mvc.perform(get(url)).andExpect(status().isBadRequest()).andDo(print());
+        deleteTestUser();
+    }
+
+    @Test
+    public void emailValidationGoodParameters() throws Exception {
+        UserEntity userEntity = makeTestUser();
+        String url = "/email_validation?key1=" + userEntity.getUuid() + "&key2=" + userEntity.getValidationToken();
+        this.mvc.perform(get(url)).andExpect(status().isAccepted()).andDo(print());
+        deleteTestUser();
+    }
+
+    private UserEntity makeTestUser() {
+        UserEntity user = new UserEntity();
+        user.setEmail(testUserMail);
+        user.setPassword(testUserPassword);
+        user.setInscriptionDate(Date.valueOf(LocalDate.now()));
+        user.setValidationToken(TokenGenerator.GetTokenSHA256());
+        user.setEmailValidation(0);
+        user.setUuid(UUID.randomUUID().toString());
+
+        try {
+            DetachedCriteria detachedCriteria = DetachedCriteria.forClass(UserEntity.class).add(Property.forName(UserProperties.EMAIL.get()).eq(testUserMail));
+            List userEntity = detachedCriteria.getExecutableCriteria(hbsession).list();
+            if (userEntity.isEmpty()) {
+                Transaction tx = hbsession.beginTransaction();
+                hbsession.saveOrUpdate(user);
+                tx.commit();
+            }
+        } catch (TransactionRequiredException e) {
+            e.fillInStackTrace();
+        }
+        return user;
+    }
+
+    private void deleteTestUser() {
+        try {
+            DetachedCriteria detachedCriteria = DetachedCriteria.forClass(UserEntity.class)
+                    .add(Property.forName(UserProperties.EMAIL.get()).eq(testUserMail));
+            List userEntity = detachedCriteria.getExecutableCriteria(hbsession).list();
+            if (!userEntity.isEmpty()) {
+                Transaction tx = hbsession.beginTransaction();
+                hbsession.delete(userEntity.get(0));
+                tx.commit();
+            }
+        } catch (TransactionRequiredException e) {
+            e.fillInStackTrace();
+        }
     }
 }

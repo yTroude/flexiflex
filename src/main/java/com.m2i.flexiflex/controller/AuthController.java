@@ -14,14 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-<<<<<<< HEAD
-=======
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.UUID;
 
->>>>>>> inscription
 @RestController
 public class AuthController {
 
@@ -31,15 +27,6 @@ public class AuthController {
     public ResponseEntity register(@RequestParam String email, @RequestParam String password) {
 
         try {
-<<<<<<< HEAD
-            Transaction tx = session.beginTransaction();
-            UserEntity user = new UserEntity();
-            user.setEmail(email);
-            user.setPassword(password);
-            session.saveOrUpdate(user);
-            tx.commit();
-            return new ResponseEntity(HttpStatus.CREATED);
-=======
             DetachedCriteria detachedCriteria = DetachedCriteria.forClass(UserEntity.class)
                     .add(Property.forName(UserProperties.EMAIL.get()).eq(email));
 
@@ -56,7 +43,6 @@ public class AuthController {
                 tx.commit();
                 return new ResponseEntity(HttpStatus.CREATED);
             }
->>>>>>> inscription
 
         } catch (Exception e) {
             e.fillInStackTrace();

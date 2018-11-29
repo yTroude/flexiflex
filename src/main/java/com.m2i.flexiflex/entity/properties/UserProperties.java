@@ -5,7 +5,7 @@ public enum UserProperties {
     PASSWORD("password"),
     INSCRIPTION_DATE("inscriptionDate"),
     VALIDATION_TOKEN("validationToken"),
-    EMAIL_VALIDE("emailValide"),
+    EMAIL_VALIDATION("emailValidation"),
     UUID("uuid");
 
     String label;

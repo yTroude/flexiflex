@@ -2,7 +2,9 @@ package com.m2i.flexiflex.entity;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.sql.SQLOutput;
 import java.util.Objects;
+import com.m2i.flexiflex.entity.properties.UserProperties;
 
 @Entity
 @Table(name = "user", schema = "flexiflex")
@@ -71,8 +73,8 @@ public class UserEntity {
         return emailValidation;
     }
 
-    public void setEmailValidation(Integer emailValidation) {
-        this.emailValidation = emailValidation;
+    public void setEmailValidation(Integer isValidated) {
+        this.emailValidation = isValidated;
     }
 
     @Basic
