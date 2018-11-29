@@ -3,6 +3,7 @@ package com.m2i.flexiflex.controller;
 import com.m2i.flexiflex.entity.UserEntity;
 import com.m2i.flexiflex.entity.properties.UserProperties;
 import com.m2i.flexiflex.service.HibernateSession;
+import com.m2i.flexiflex.service.TokenGenerator;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.DetachedCriteria;
@@ -14,6 +15,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+<<<<<<< HEAD
+=======
+import java.sql.Date;
+import java.time.LocalDate;
+import java.util.UUID;
+
+>>>>>>> inscription
 @RestController
 public class AuthController {
 
@@ -21,7 +29,9 @@ public class AuthController {
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public ResponseEntity register(@RequestParam String email, @RequestParam String password) {
+
         try {
+<<<<<<< HEAD
             Transaction tx = session.beginTransaction();
             UserEntity user = new UserEntity();
             user.setEmail(email);
@@ -29,6 +39,24 @@ public class AuthController {
             session.saveOrUpdate(user);
             tx.commit();
             return new ResponseEntity(HttpStatus.CREATED);
+=======
+            DetachedCriteria detachedCriteria = DetachedCriteria.forClass(UserEntity.class)
+                    .add(Property.forName(UserProperties.EMAIL.get()).eq(email));
+
+            if (detachedCriteria.getExecutableCriteria(session).list().isEmpty()){
+                Transaction tx = session.beginTransaction();
+                UserEntity user = new UserEntity();
+                user.setEmail(email);
+                user.setPassword(password);
+                user.setInscriptionDate(Date.valueOf(LocalDate.now()));
+                user.setValidationToken(TokenGenerator.GetTokenSHA256());
+                user.setEmailValidation(0);
+                user.setUuid(UUID.randomUUID().toString());
+                session.save(user);
+                tx.commit();
+                return new ResponseEntity(HttpStatus.CREATED);
+            }
+>>>>>>> inscription
 
         } catch (Exception e) {
             e.fillInStackTrace();
@@ -40,7 +68,7 @@ public class AuthController {
     public ResponseEntity<UserEntity> login(@RequestParam String email, @RequestParam String password) {
 
         DetachedCriteria detachedCriteria = DetachedCriteria.forClass(UserEntity.class)
-                .add( Property.forName(UserProperties.EMAIL.get()).eq(email) );
+                .add(Property.forName(UserProperties.EMAIL.get()).eq(email) );
 
         try {
             UserEntity user = (UserEntity) detachedCriteria.getExecutableCriteria(session).list().get(0);
