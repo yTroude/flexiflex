@@ -1,20 +1,10 @@
 package com.m2i.flexiflex.entity.properties;
 
-public enum UserProperties {
-    EMAIL("email"),
-    PASSWORD("password"),
-    INSCRIPTION_DATE("inscriptionDate"),
-    VALIDATION_TOKEN("validationToken"),
-    EMAIL_VALIDE("emailValide"),
-    UUID("uuid");
-
-    String label;
-
-    UserProperties(String label) {
-        this.label = label;
-    }
-
-    public String get() {
-        return label;
-    }
+public class UserProperties {
+    public static final String EMAIL = "email";
+    public static final String PASSWORD = "password";
+    public static final String INSCRIPTION_DATE = "inscriptionDate";
+    public static final String VALIDATION_TOKEN = "validationToken";
+    public static final String EMAIL_VALIDE = "emailValide";
+    public static final String UUID = "uuid";
 }

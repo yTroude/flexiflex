@@ -1,0 +1,13 @@
+version: "3"
+
+services:
+  database:
+    environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+      MYSQL_DATABASE: "flexiflex"
+      MYSQL_USER: "flexiflexadmin"
+      MYSQL_PASSWORD: "test"
+    image: mysql:5.7.21
+    ports:
+      - 3306:3306
+    restart: always

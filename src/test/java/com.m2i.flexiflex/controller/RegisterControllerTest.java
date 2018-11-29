@@ -14,13 +14,12 @@ import java.nio.charset.Charset;
 
 import static com.m2i.flexiflex.controller.factories.UserFactory.deleteTestUser;
 import static com.m2i.flexiflex.controller.factories.UserFactory.makeTestUser;
-import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(AuthController.class)
-public class AuthControllerTest {
+@WebMvcTest(RegisterController.class)
+public class RegisterControllerTest {
 
     @Autowired
     private MockMvc mvc;
@@ -31,36 +30,25 @@ public class AuthControllerTest {
             Charset.forName("utf8"));
 
     @Test
-    public void nonUserCannotLogin() throws Exception {
-        mvc.perform(post("/login")
-                .param(UserProperties.EMAIL, "toto@caca.toto")
+    public void nonUserCanRegister() throws Exception{
+        mvc.perform(post("/register")
+                .param(UserProperties.EMAIL, UserFactory.getTestUserMail())
                 .param(UserProperties.PASSWORD, UserFactory.getTestUserPassword())
                 .contentType(APPLICATION_JSON_UTF8))
-                .andExpect(status().isUnauthorized());
-    }
-
-    @Test
-    public void userCannotLoginWithBadPassword() throws Exception {
-        makeTestUser();
-
-        mvc.perform(post("/login")
-                .param(UserProperties.EMAIL, UserFactory.getTestUserMail())
-                .param(UserProperties.PASSWORD, "caca")
-                .contentType(APPLICATION_JSON))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isCreated());
 
         deleteTestUser();
     }
 
     @Test
-    public void userCanLoginWithPassword() throws Exception {
+    public void registeredUserCannotRegister() throws Exception {
         makeTestUser();
 
-        mvc.perform(post("/login")
+        mvc.perform(post("/register")
                 .param(UserProperties.EMAIL, UserFactory.getTestUserMail())
                 .param(UserProperties.PASSWORD, UserFactory.getTestUserPassword())
                 .contentType(APPLICATION_JSON_UTF8))
-                .andExpect(status().isOk());
+                .andExpect(status().isBadRequest());
 
         deleteTestUser();
     }

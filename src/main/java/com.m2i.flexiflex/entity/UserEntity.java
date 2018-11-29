@@ -1,12 +1,17 @@
 package com.m2i.flexiflex.entity;
 
-import javax.persistence.*;
+import com.m2i.flexiflex.entity.properties.UserProperties;
+
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.sql.Date;
 import java.util.Objects;
 
-@Entity
-@Table(name = "user", schema = "flexiflex")
+@Entity(name = "user")
 public class UserEntity {
+
     private int id;
     private String email;
     private String password;
@@ -26,7 +31,7 @@ public class UserEntity {
     }
 
     @Basic
-    @Column(name = "email")
+    @Column(name = UserProperties.EMAIL)
     public String getEmail() {
         return email;
     }
@@ -36,7 +41,7 @@ public class UserEntity {
     }
 
     @Basic
-    @Column(name = "password")
+    @Column(name = UserProperties.PASSWORD)
     public String getPassword() {
         return password;
     }
@@ -46,7 +51,7 @@ public class UserEntity {
     }
 
     @Basic
-    @Column(name = "inscriptionDate")
+    @Column(name = UserProperties.INSCRIPTION_DATE)
     public Date getInscriptionDate() {
         return inscriptionDate;
     }
@@ -56,7 +61,7 @@ public class UserEntity {
     }
 
     @Basic
-    @Column(name = "validationToken")
+    @Column(name = UserProperties.VALIDATION_TOKEN)
     public String getValidationToken() {
         return validationToken;
     }
@@ -66,7 +71,7 @@ public class UserEntity {
     }
 
     @Basic
-    @Column(name = "emailValidation")
+    @Column(name = UserProperties.EMAIL_VALIDE)
     public Integer getEmailValidation() {
         return emailValidation;
     }
@@ -76,7 +81,7 @@ public class UserEntity {
     }
 
     @Basic
-    @Column(name = "UUID")
+    @Column(name = UserProperties.UUID)
     public String getUuid() {
         return uuid;
     }
