@@ -6,7 +6,7 @@ services:
       MYSQL_RANDOM_ROOT_PASSWORD: "yes"
       MYSQL_DATABASE: "flexiflex"
       MYSQL_USER: "flexiflexadmin"
-      MYSQL_PASSWORD: "test"
+      MYSQL_PASSWORD: "m2ijavamsa"
     image: mysql:5.7.21
     ports:
       - 3306:3306
