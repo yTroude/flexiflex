@@ -25,7 +25,7 @@ public class RegisterController {
     private final Session session = HibernateSession.getSession();
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public ResponseEntity register(@RequestParam String email, @RequestParam String password) {
+    public ResponseEntity register(@RequestParam String email, @RequestParam String password, @RequestParam String birthdate) {
 
         try {
             DetachedCriteria detachedCriteria = DetachedCriteria.forClass(UserEntity.class)
@@ -40,6 +40,7 @@ public class RegisterController {
                 user.setValidationToken(TokenGenerator.GetTokenSHA256());
                 user.setEmailValidation(0);
                 user.setUuid(UUID.randomUUID().toString());
+                user.setBirthDate(birthdate);
                 session.save(user);
                 tx.commit();
 

@@ -34,6 +34,7 @@ public class RegisterControllerTest {
         mvc.perform(post("/register")
                 .param(UserProperties.EMAIL, UserFactory.getTestUserMail())
                 .param(UserProperties.PASSWORD, UserFactory.getTestUserPassword())
+                .param(UserProperties.BIRTH_DATE, UserFactory.getTestUserbirthDate())
                 .contentType(APPLICATION_JSON_UTF8))
                 .andExpect(status().isCreated());
 
@@ -47,6 +48,7 @@ public class RegisterControllerTest {
         mvc.perform(post("/register")
                 .param(UserProperties.EMAIL, UserFactory.getTestUserMail())
                 .param(UserProperties.PASSWORD, UserFactory.getTestUserPassword())
+                .param(UserProperties.BIRTH_DATE, UserFactory.getTestUserbirthDate())
                 .contentType(APPLICATION_JSON_UTF8))
                 .andExpect(status().isBadRequest());
 

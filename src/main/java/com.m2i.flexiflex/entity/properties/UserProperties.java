@@ -8,4 +8,5 @@ public class UserProperties {
     public static final String EMAIL_VALIDE = "email_validation";
     public static final String UUID = "uuid";
     public static final String AUTH_TOKEN = "auth_token";
+    public static final String BIRTH_DATE = "birthdate";
 }

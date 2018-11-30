@@ -17,6 +17,15 @@ import java.util.UUID;
 
 public class UserFactory {
     private static String testUserMail = "user@mail.com";
+    private static String testUserbirthDate = "1986-01-01";
+
+    public static String getTestUserbirthDate() {
+        return testUserbirthDate;
+    }
+
+    public static void setTestUserbirthDate(String testUserbirthDate) {
+        UserFactory.testUserbirthDate = testUserbirthDate;
+    }
 
     public static String getTestUserMail() {
         return testUserMail;

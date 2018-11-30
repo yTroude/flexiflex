@@ -20,6 +20,7 @@ public class UserEntity {
     private Integer emailValidation;
     private String uuid;
     private String authToken;
+    private String birthDate;
 
     @Id
     @Column(name = "id")
@@ -99,6 +100,16 @@ public class UserEntity {
 
     public void setAuthToken(String authToken) {
         this.authToken = authToken;
+    }
+
+    @Basic
+    @Column(name = UserProperties.BIRTH_DATE)
+    public String getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(String birthDate) {
+        this.birthDate = birthDate;
     }
 
     @Override
