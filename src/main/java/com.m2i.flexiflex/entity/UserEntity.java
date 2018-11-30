@@ -19,6 +19,7 @@ public class UserEntity {
     private String validationToken;
     private Integer emailValidation;
     private String uuid;
+    private String authToken;
 
     @Id
     @Column(name = "id")
@@ -88,6 +89,16 @@ public class UserEntity {
 
     public void setUuid(String uuid) {
         this.uuid = uuid;
+    }
+
+    @Basic
+    @Column(name = UserProperties.AUTH_TOKEN)
+    public String getAuthToken() {
+        return authToken;
+    }
+
+    public void setAuthToken(String authToken) {
+        this.authToken = authToken;
     }
 
     @Override

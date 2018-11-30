@@ -64,7 +64,7 @@ public class UserFactory {
                 user.setPassword(testUserPassword);
                 user.setInscriptionDate(Date.valueOf(LocalDate.now()));
                 user.setValidationToken(TokenGenerator.GetTokenSHA256());
-                user.setEmailValidation(0);
+                user.setEmailValidation(1);
                 user.setUuid(UUID.randomUUID().toString());
                 hbsession.saveOrUpdate(user);
                 tx.commit();

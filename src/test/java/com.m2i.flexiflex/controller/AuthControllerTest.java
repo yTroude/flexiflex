@@ -16,6 +16,7 @@ import static com.m2i.flexiflex.controller.factories.UserFactory.deleteTestUser;
 import static com.m2i.flexiflex.controller.factories.UserFactory.makeTestUser;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -60,7 +61,7 @@ public class AuthControllerTest {
                 .param(UserProperties.EMAIL, UserFactory.getTestUserMail())
                 .param(UserProperties.PASSWORD, UserFactory.getTestUserPassword())
                 .contentType(APPLICATION_JSON_UTF8))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk()).andDo(print());
 
         deleteTestUser();
     }

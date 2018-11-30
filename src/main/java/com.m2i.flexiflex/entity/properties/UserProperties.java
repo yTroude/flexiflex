@@ -7,4 +7,5 @@ public class UserProperties {
     public static final String VALIDATION_TOKEN = "validation_token";
     public static final String EMAIL_VALIDE = "email_validation";
     public static final String UUID = "uuid";
+    public static final String AUTH_TOKEN = "auth_token";
 }
