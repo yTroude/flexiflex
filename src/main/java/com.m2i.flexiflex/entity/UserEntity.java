@@ -21,6 +21,8 @@ public class UserEntity {
     private String uuid;
     private String authToken;
     private String birthDate;
+    private String firstName;
+    private String lastName;
 
     @Id
     @Column(name = "id")
@@ -110,6 +112,26 @@ public class UserEntity {
 
     public void setBirthDate(String birthDate) {
         this.birthDate = birthDate;
+    }
+
+    @Basic
+    @Column(name = UserProperties.LAST_NAME)
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    @Basic
+    @Column(name = UserProperties.FIRST_NAME)
+    public String getLastName () {
+        return lastName;
+    }
+
+    public void setLastName (String lastName) {
+        this.lastName = lastName;
     }
 
     @Override

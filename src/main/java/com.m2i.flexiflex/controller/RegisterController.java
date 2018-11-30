@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -45,6 +46,30 @@ public class RegisterController {
                 tx.commit();
 
                 return new ResponseEntity(HttpStatus.CREATED);
+            }
+        } catch (Exception e) {
+            e.fillInStackTrace();
+        }
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
+    }
+
+    @RequestMapping(value = "/finalregister", method = RequestMethod.POST)
+    public ResponseEntity finalRegister(
+            @RequestParam String uuid,
+            @RequestParam String validation_token,
+            @RequestParam String firstname,
+            @RequestParam String lastname
+    ) {
+        try {
+            Session session = HibernateSession.getSession();
+            DetachedCriteria detachedCriteria = DetachedCriteria.forClass(UserEntity.class).add(Property.forName(UserProperties.UUID).eq(uuid));
+            List<UserEntity> userEntity = detachedCriteria.getExecutableCriteria(session).list();
+            if (!userEntity.isEmpty() && userEntity.get(0).getValidationToken().equals(validation_token)) {
+                Transaction tx = session.beginTransaction();
+                userEntity.get(0).setFirstName(firstname);
+                userEntity.get(0).setLastName(lastname);
+                tx.commit();
+                return new ResponseEntity(HttpStatus.OK);
             }
         } catch (Exception e) {
             e.fillInStackTrace();

@@ -4,8 +4,6 @@ import com.m2i.flexiflex.entity.UserEntity;
 import com.m2i.flexiflex.entity.properties.UserProperties;
 import com.m2i.flexiflex.service.Cryptor;
 import com.m2i.flexiflex.service.HibernateSession;
-import jdk.nashorn.internal.runtime.JSONListAdapter;
-import org.codehaus.jackson.map.util.JSONPObject;
 import org.hibernate.Session;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Property;
@@ -38,11 +36,11 @@ public class AuthController {
 
                 Cookie myCookie = new Cookie("flexiflex", user.getUuid() + "_" + hash);
 
-                return new ResponseEntity(myCookie, HttpStatus.OK);
+                return new ResponseEntity<>(myCookie, HttpStatus.OK);
             }
         } catch (Exception e) {
             e.fillInStackTrace();
         }
-        return new ResponseEntity<>((UserEntity) null, HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>((Cookie) null, HttpStatus.UNAUTHORIZED);
     }
 }

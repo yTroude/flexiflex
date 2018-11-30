@@ -4,6 +4,7 @@ import com.m2i.flexiflex.controller.factories.UserFactory;
 import com.m2i.flexiflex.entity.UserEntity;
 import com.m2i.flexiflex.entity.properties.UserProperties;
 import com.m2i.flexiflex.service.Cryptor;
+import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,6 @@ import static com.m2i.flexiflex.controller.factories.UserFactory.makeTestUser;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -75,6 +75,11 @@ public class AuthControllerTest {
         assert myCookie.getName().equals("flexiflex");
         assert myCookie.getValue().equals(value);
 
+        deleteTestUser();
+    }
+
+    @After
+    public void after() {
         deleteTestUser();
     }
 }

@@ -1,7 +1,11 @@
 package com.m2i.flexiflex.controller;
 
 import com.m2i.flexiflex.controller.factories.UserFactory;
+import com.m2i.flexiflex.entity.UserEntity;
 import com.m2i.flexiflex.entity.properties.UserProperties;
+import com.m2i.flexiflex.service.Cryptor;
+import com.m2i.flexiflex.service.TokenGenerator;
+import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +19,7 @@ import java.nio.charset.Charset;
 import static com.m2i.flexiflex.controller.factories.UserFactory.deleteTestUser;
 import static com.m2i.flexiflex.controller.factories.UserFactory.makeTestUser;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -52,6 +57,28 @@ public class RegisterControllerTest {
                 .contentType(APPLICATION_JSON_UTF8))
                 .andExpect(status().isBadRequest());
 
+        deleteTestUser();
+    }
+
+    @Test
+    public void validatedUserCanFinalRegister() throws Exception {
+        UserEntity userEntity = makeTestUser();
+        String firstname = "toto";
+        String lastname = "caca";
+        String token = userEntity.getValidationToken();
+
+
+        mvc.perform(post("/finalregister")
+                .param(UserProperties.UUID, userEntity.getUuid())
+                .param(UserProperties.VALIDATION_TOKEN, token)
+                .param(UserProperties.FIRST_NAME, firstname)
+                .param(UserProperties.LAST_NAME, lastname))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @After
+    public void after() {
         deleteTestUser();
     }
 }

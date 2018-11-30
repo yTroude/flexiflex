@@ -9,4 +9,6 @@ public class UserProperties {
     public static final String UUID = "uuid";
     public static final String AUTH_TOKEN = "auth_token";
     public static final String BIRTH_DATE = "birthdate";
+    public static final String FIRST_NAME = "lastname";
+    public static final String LAST_NAME = "firstname";
 }
