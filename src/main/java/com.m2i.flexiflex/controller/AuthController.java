@@ -34,7 +34,6 @@ public class AuthController {
             e.fillInStackTrace();
         }
         return new ResponseEntity<>((UserEntity) null, HttpStatus.UNAUTHORIZED);
-
     }
 }
 

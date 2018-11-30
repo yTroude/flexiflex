@@ -7,9 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.sql.Date;
-import java.sql.SQLOutput;
 import java.util.Objects;
-import com.m2i.flexiflex.entity.properties.UserProperties;
 
 @Entity(name = "user")
 public class UserEntity {

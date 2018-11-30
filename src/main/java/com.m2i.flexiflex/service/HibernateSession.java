@@ -15,6 +15,7 @@ public class HibernateSession {
 
             ourSessionFactory = configuration.buildSessionFactory();
         } catch (Throwable ex) {
+            ex.fillInStackTrace();
             throw new ExceptionInInitializerError(ex);
         }
     }
