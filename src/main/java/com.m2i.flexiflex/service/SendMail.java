@@ -14,7 +14,7 @@ import javax.mail.internet.MimeMessage;
 // -----------------------------------------------------------------------------------
 // -------------------- Fonction qui envoie l'email. A instancier --------------------
 // -----------------------------------------------------------------------------------
-
+//
 //    public static void main(String[] args) {
 //
 //        String userEmail = "florent.chazot@gmail.com";
@@ -30,8 +30,8 @@ public class SendMail {
     public static void sendMail(String m_from,String m_to,String m_subject,String m_body){
 
         try {
-            final String username = ""; // Mettre l'email de Flexiflex
-            final String password = ""; // Mettre le password de Flexiflex
+            final String username = "flexiflex.emailvalidation@gmail.com"; // Mettre l'email de Flexiflex
+            final String password = "Flexiflex2018"; // Mettre le password de Flexiflex
 
             Properties m_properties = new Properties();
             m_properties.put("mail.smtp.host", "smtp.gmail.com");
@@ -54,7 +54,7 @@ public class SendMail {
             m_simpleMessage.setFrom(m_fromAddress);
             m_simpleMessage.setRecipient(RecipientType.TO, m_toAddress);
             m_simpleMessage.setSubject(m_subject);
-            m_simpleMessage.setContent(m_body,"text/plain");
+            m_simpleMessage.setContent(m_body,"text/html; charset=\"UTF-8\"");
 
             Transport.send(m_simpleMessage);
 
@@ -63,3 +63,6 @@ public class SendMail {
         }
     }
 }
+
+
+//http://localhost:3306/email_validation?key1:uuid&key2=validationtoken

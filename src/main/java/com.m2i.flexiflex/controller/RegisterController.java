@@ -3,6 +3,7 @@ package com.m2i.flexiflex.controller;
 import com.m2i.flexiflex.entity.UserEntity;
 import com.m2i.flexiflex.entity.properties.UserProperties;
 import com.m2i.flexiflex.service.HibernateSession;
+import com.m2i.flexiflex.service.SendMail;
 import com.m2i.flexiflex.service.TokenGenerator;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -28,7 +29,7 @@ public class RegisterController {
     public ResponseEntity register(@RequestParam String email, @RequestParam String password) {
 
         try {
-            DetachedCriteria detachedCriteria = DetachedCriteria.forClass(UserEntity.class)
+                DetachedCriteria detachedCriteria = DetachedCriteria.forClass(UserEntity.class)
                     .add(Property.forName(UserProperties.EMAIL).eq(email));
 
             if (detachedCriteria.getExecutableCriteria(session).list().isEmpty()){
@@ -42,6 +43,13 @@ public class RegisterController {
                 user.setUuid(UUID.randomUUID().toString());
                 session.save(user);
                 tx.commit();
+
+                //ENVOI MAIL VALIDATION
+                SendMail send_mail    =   new SendMail();
+                String url="<div dir=\"ltr\"><a href=\"http://localhost:8080/email_validation?key1="+ user.getUuid() + "&key2=" + user.getValidationToken() + "\">Confirmer votre inscription</a><br></div>";
+                String body="Pour confirmer votre inscription, cliquez sur ce lien :" + url;
+
+                send_mail.sendMail("flexiflex.emailvalidation@gmail.com", "florent.chazot@gmail.com", "Flexiflex - Validation de votre inscription",body);
 
                 return new ResponseEntity(HttpStatus.CREATED);
             }

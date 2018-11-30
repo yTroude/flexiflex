@@ -53,6 +53,7 @@ public class EmailValidationControllerTest {
 
     @Test
     public void emailValidationBadUuid() throws Exception {
+        deleteTestUser();
         UserEntity userEntity = makeTestUser();
         String url = "/email_validation?key1=" + "nimportequoi" + "&key2=" + "nimportequoi";
         this.mvc.perform(get(url)).andExpect(status().isBadRequest()).andDo(print());
@@ -61,6 +62,7 @@ public class EmailValidationControllerTest {
 
     @Test
     public void emailValidationBadValidationToken() throws Exception {
+        deleteTestUser();
         UserEntity userEntity = makeTestUser();
         String url = "/email_validation?key1=" + userEntity.getUuid() + "&key2=" + "nimportequoi";
         this.mvc.perform(get(url)).andExpect(status().isBadRequest()).andDo(print());
@@ -69,6 +71,7 @@ public class EmailValidationControllerTest {
 
     @Test
     public void emailValidationGoodParameters() throws Exception {
+          deleteTestUser();
         UserEntity userEntity = makeTestUser();
         String url = "/email_validation?key1=" + userEntity.getUuid() + "&key2=" + userEntity.getValidationToken();
         this.mvc.perform(get(url)).andExpect(status().isAccepted()).andDo(print());
