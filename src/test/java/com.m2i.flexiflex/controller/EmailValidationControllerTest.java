@@ -1,6 +1,7 @@
 
 package com.m2i.flexiflex.controller;
 
+import com.m2i.flexiflex.FlexiflexApplication;
 import com.m2i.flexiflex.entity.UserEntity;
 import com.m2i.flexiflex.entity.properties.UserProperties;
 import com.m2i.flexiflex.service.HibernateSession;
@@ -9,13 +10,18 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Property;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import javax.persistence.TransactionRequiredException;
 import java.nio.charset.Charset;
@@ -31,11 +37,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(EmailValidationController.class)
+//@WebMvcTest(EmailValidationController.class)
+@SpringBootTest(classes=FlexiflexApplication.class)
+@AutoConfigureMockMvc
 public class EmailValidationControllerTest {
 
     @Autowired
     private MockMvc mvc;
+    @Autowired
+    WebApplicationContext wac;
     private Session hbsession = HibernateSession.getSession();
     private String testUserMail = "user@mail.com";
     private String testUserPassword = "secret";
@@ -44,7 +54,10 @@ public class EmailValidationControllerTest {
             MediaType.APPLICATION_JSON.getType(),
             MediaType.APPLICATION_JSON.getSubtype(),
             Charset.forName("utf8"));
+    @Before
+    public void setup() {mvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
 
+    }
     @Test
     public void emailValidationRequestParamAbsent() throws Exception {
         String url = "/email_validation";
